@@ -57,3 +57,5 @@ gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby]
 
 # for test data generation
 gem 'faker'
+# for authentication
+gem 'devise'
