@@ -7,6 +7,12 @@ class Order < ApplicationRecord
 
   validates :number, uniqueness: true
 
+  def add_product(product, quantity)
+    if product && product.stock.positive?
+      OrderItem.create(product: product, order: self, quantity: quantity, price: product.price)
+    end
+  end
+
   private
 
   def number_length
