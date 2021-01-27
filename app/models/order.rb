@@ -2,6 +2,9 @@ class Order < ApplicationRecord
   before_create -> { generate_order_number(number_length) }
 
   belongs_to :user
+  has_many :order_items
+  has_many :products, through: :order_items
+
   validates :number, uniqueness: true
 
   private
