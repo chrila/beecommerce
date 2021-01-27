@@ -6,6 +6,8 @@ Rails.application.routes.draw do
     resources :products
     resources :categories
   end
+
+  resources :carts, only: [:show, :update]
   
   root 'home#index'
 end
