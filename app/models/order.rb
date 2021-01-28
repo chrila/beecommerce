@@ -14,6 +14,10 @@ class Order < ApplicationRecord
     end
   end
 
+  def total
+    order_items.map(&:price).sum
+  end
+
   private
 
   def number_length
