@@ -83,8 +83,8 @@ Rails.application.configure do
     paypal_options = {
       login: ENV["PAYPAL_LOGIN_EMAIL"],
       password: ENV["PAYPAL_PASSWORD"],
-      signature: ENV["PAYPAL_SIGNATURE"]
+      signature: 'asdf' #ENV["PAYPAL_SIGNATURE"]
     }
-    ::EXPRESS_GATEWAY =   ActiveMerchant::Billing::PaypalExpressGateway.new(paypal_options)
+    ::EXPRESS_GATEWAY = ActiveMerchant::Billing::PaypalExpressGateway.new(paypal_options)
   end
 end
