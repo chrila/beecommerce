@@ -14,12 +14,10 @@
                 </div>
                 <div class="row float-right">
                   <div class="col-md-12">
-                    <% if signed_in? %>
-                      <%= form_for :cart, url: cart_path(current_order), method: :put do |f| %>
-                        <%= f.hidden_field :product_id, value: product.id %>
-                        <%= f.hidden_field :quantity, value: 1 %>
-                        <%= f.submit "Add to cart", class: 'btn btn-primary btn-sm' %>
-                      <% end %>
+                    <%= form_for :cart, url: cart_path, method: :put do |f| %>
+                      <%= f.hidden_field :product_id, value: product.id %>
+                      <%= f.hidden_field :quantity, value: 1 %>
+                      <%= f.submit "Add to cart", class: 'btn btn-primary btn-sm' %>
                     <% end %>
                   </div>
                 </div>
