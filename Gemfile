@@ -64,3 +64,5 @@ gem 'rspec-rails'
 gem 'rails-controller-testing'
 gem 'rexml'
 gem 'factory_bot_rails'
+# for paypal integration
+gem 'activemerchant'
