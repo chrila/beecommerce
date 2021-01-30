@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_01_28_034410) do
+ActiveRecord::Schema.define(version: 2021_01_30_200232) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -42,15 +42,30 @@ ActiveRecord::Schema.define(version: 2021_01_28_034410) do
     t.index ["product_id", "category_id"], name: "index_categories_products_on_product_id_and_category_id"
   end
 
+  create_table "coupons", force: :cascade do |t|
+    t.decimal "value"
+    t.boolean "percent"
+    t.string "code"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
+
+  create_table "coupons_users", id: false, force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.bigint "coupon_id", null: false
+    t.index ["coupon_id", "user_id"], name: "index_coupons_users_on_coupon_id_and_user_id"
+    t.index ["user_id", "coupon_id"], name: "index_coupons_users_on_user_id_and_coupon_id"
+  end
+
   create_table "order_items", force: :cascade do |t|
     t.bigint "order_id", null: false
-    t.bigint "product_id", null: false
     t.integer "quantity"
     t.decimal "price"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.bigint "product_variant_id", null: false
     t.index ["order_id"], name: "index_order_items_on_order_id"
-    t.index ["product_id"], name: "index_order_items_on_product_id"
+    t.index ["product_variant_id"], name: "index_order_items_on_product_variant_id"
   end
 
   create_table "orders", force: :cascade do |t|
@@ -60,6 +75,8 @@ ActiveRecord::Schema.define(version: 2021_01_28_034410) do
     t.string "state"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.bigint "coupon_id"
+    t.index ["coupon_id"], name: "index_orders_on_coupon_id"
     t.index ["user_id"], name: "index_orders_on_user_id"
   end
 
@@ -83,11 +100,21 @@ ActiveRecord::Schema.define(version: 2021_01_28_034410) do
     t.index ["payment_method_id"], name: "index_payments_on_payment_method_id"
   end
 
+  create_table "product_variants", force: :cascade do |t|
+    t.bigint "product_id", null: false
+    t.bigint "variant_id", null: false
+    t.string "value"
+    t.integer "stock"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.decimal "price"
+    t.index ["product_id"], name: "index_product_variants_on_product_id"
+    t.index ["variant_id"], name: "index_product_variants_on_variant_id"
+  end
+
   create_table "products", force: :cascade do |t|
     t.string "name"
     t.text "description"
-    t.integer "stock"
-    t.decimal "price"
     t.string "sku"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
@@ -105,10 +132,19 @@ ActiveRecord::Schema.define(version: 2021_01_28_034410) do
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
 
+  create_table "variants", force: :cascade do |t|
+    t.string "name"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
+
   add_foreign_key "categories", "categories"
   add_foreign_key "order_items", "orders"
-  add_foreign_key "order_items", "products"
+  add_foreign_key "order_items", "product_variants"
+  add_foreign_key "orders", "coupons"
   add_foreign_key "orders", "users"
   add_foreign_key "payments", "orders"
   add_foreign_key "payments", "payment_methods"
+  add_foreign_key "product_variants", "products"
+  add_foreign_key "product_variants", "variants"
 end
