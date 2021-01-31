@@ -75,8 +75,8 @@ c2 = Coupon.create(value: 10, percent: true, code: 'TUVWXYZ')
 ## Relacionar un coupon a usuarios y pedidos
 ```ruby
 c = Coupon.create(value: 20000, percent: false, code: 'ABCDEFGH')
-o = Order.create
 u = User.create(email: 'test@example.com', password: '123456')
+o = Order.create(user: u)
 
 # agregar el coupon al pedido
 o.coupon = c

@@ -1,12 +1,12 @@
 class Order < ApplicationRecord
-  before_create -> { generate_order_number(number_length) }
+  before_validation -> { generate_order_number(number_length) }
 
   belongs_to :user
   has_many :order_items
   has_many :products, through: :order_items
   has_many :payments
-  belongs_to :coupon
-
+  belongs_to :coupon, optional: true
+  
   validates :number, uniqueness: true
 
   def add_product(product, quantity)

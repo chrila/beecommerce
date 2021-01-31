@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  resources :variants
   devise_for :users
   devise_for :admins
 

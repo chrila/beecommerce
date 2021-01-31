@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_01_30_200232) do
+ActiveRecord::Schema.define(version: 2021_01_31_040223) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -59,13 +59,13 @@ ActiveRecord::Schema.define(version: 2021_01_30_200232) do
 
   create_table "order_items", force: :cascade do |t|
     t.bigint "order_id", null: false
+    t.bigint "product_id", null: false
     t.integer "quantity"
     t.decimal "price"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.bigint "product_variant_id", null: false
     t.index ["order_id"], name: "index_order_items_on_order_id"
-    t.index ["product_variant_id"], name: "index_order_items_on_product_variant_id"
+    t.index ["product_id"], name: "index_order_items_on_product_id"
   end
 
   create_table "orders", force: :cascade do |t|
@@ -101,13 +101,11 @@ ActiveRecord::Schema.define(version: 2021_01_30_200232) do
   end
 
   create_table "product_variants", force: :cascade do |t|
-    t.bigint "product_id", null: false
     t.bigint "variant_id", null: false
+    t.bigint "product_id", null: false
     t.string "value"
-    t.integer "stock"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.decimal "price"
     t.index ["product_id"], name: "index_product_variants_on_product_id"
     t.index ["variant_id"], name: "index_product_variants_on_variant_id"
   end
@@ -115,6 +113,8 @@ ActiveRecord::Schema.define(version: 2021_01_30_200232) do
   create_table "products", force: :cascade do |t|
     t.string "name"
     t.text "description"
+    t.integer "stock"
+    t.decimal "price"
     t.string "sku"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
@@ -140,7 +140,7 @@ ActiveRecord::Schema.define(version: 2021_01_30_200232) do
 
   add_foreign_key "categories", "categories"
   add_foreign_key "order_items", "orders"
-  add_foreign_key "order_items", "product_variants"
+  add_foreign_key "order_items", "products"
   add_foreign_key "orders", "coupons"
   add_foreign_key "orders", "users"
   add_foreign_key "payments", "orders"
