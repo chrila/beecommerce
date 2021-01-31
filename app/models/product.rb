@@ -4,5 +4,5 @@ class Product < ApplicationRecord
   has_many :orders, through: :order_items
   has_many :product_variants
 
-  scope :catalogue, -> { pluck(:sku, :name, :description).uniq }
+  scope :catalogue, -> { where('stock > 0').uniq { |prod| prod.sku } }
 end

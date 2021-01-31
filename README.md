@@ -83,3 +83,25 @@ o.coupon = c
 # agregar el coupon al usuario
 u.coupons << c
 ```
+
+# Variaciones de productos
+## Uso
+Los distintos tipos de variaciones están en el modelo `Variant` (ejemplo: color). Cuando se relaciona con un producto, hay que crear un `ProductVariant`, indicando el valor (ejemplo: rojo). Ejemplo:
+```ruby
+p = Product.create(name: 'Tennis shoes', description: 'Shoes with a resistant sole, ideal for playing tennis', stock: 50, price: 60, sku: 'SHTNSXGH95')
+v = Variant.create(name: 'Color')
+pv = ProductVariant.create(variant: v, value: 'red')
+p.product_variants << pv
+```
+
+## Mostrar el catálogo de productos
+Para mostrar un catálogo de productos disponibles (los que tienen stock), se puede usar el scope `Product.catalogue`. Por ejemplo:
+```erb
+<% Product.catalogue.each do |prod| %>
+  <%= "SKU: #{prod.sku}; Name: #{prod.name}" %>
+<% end %>
+```
+
+# El modelo
+Con las modificaciones, el modelo se ve así:
+![ERD diagram](doc/erd.png)
