@@ -23,6 +23,14 @@ RSpec.describe Order, type: :model do
     expect(order.order_items.count).to be == 1
   end
 
+  it 'updates the total value of the order according to its items' do
+    user = User.create(email: 'test@test.com', password: 'asdfghjkl')
+    order = Order.create(user: user)
+    product = Product.create(name: 'TestItem', price: 1000, stock: 10, sku: 'ASDF001')
+    order.add_product(product, 5)
+    expect(order.total).to be == (5 * product.price)
+  end
+
   it 'is not allowed to add a product without stock' do
     user = User.create(email: 'test@test.com', password: 'asdfghjkl')
     order = Order.create(user: user)
@@ -30,5 +38,16 @@ RSpec.describe Order, type: :model do
     
     order.add_product(product, 1)
     expect(order.order_items.count).to be == 0
+  end
+
+  it 'can be paid with paypal' do
+    PaymentMethod.create(name: 'PayPal Express Checkout', code: 'PEC')
+    user = User.create(email: 'test@test.com', password: 'asdfghjkl')
+    order = Order.create(user: user)
+    product = Product.create(name: 'TestItem', price: 1000, stock: 10, sku: 'ASDF001')
+    order.add_product(product, 5)
+    url = order.pay_with_paypal('192.168.1.1', 'a', 'b')
+    
+    expect(url).to start_with('https://www.sandbox.paypal.com/cgi-bin/webscr?cmd=_express-checkout&token=')
   end
 end

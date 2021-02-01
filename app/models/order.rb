@@ -17,6 +17,30 @@ class Order < ApplicationRecord
     end
   end
 
+  def pay_with_paypal(remote_ip, return_url, cancel_return_url)
+    #price must be in cents
+    price = total * 100
+
+    response = EXPRESS_GATEWAY.setup_purchase(price,
+      ip: remote_ip,
+      return_url: return_url,
+      cancel_return_url: cancel_return_url,
+      allow_guest_checkout: true,
+      currency: "USD"
+    )
+
+    payment_method = PaymentMethod.find_by(code: "PEC")
+    Payment.create(
+      order_id: self.id,
+      payment_method_id: payment_method.id,
+      state: "processing",
+      total: self.total,
+      token: response.token
+    )
+
+    EXPRESS_GATEWAY.redirect_url_for(response.token)
+  end
+
   private
 
   def number_length
