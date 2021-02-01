@@ -17,7 +17,7 @@ Category.all.each do |cat|
         name: product_name,
         description: product_desc,
         stock: rand(10..50),
-        price: product_price * rand(0.9..1.1),
+        price: product_price,
         sku: product_sku
       )
       p.categories << cat

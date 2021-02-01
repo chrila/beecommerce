@@ -12,11 +12,9 @@ class Order < ApplicationRecord
   def add_product(product, quantity)
     if product && product.stock.positive?
       OrderItem.create(product: product, order: self, quantity: quantity, price: product.price)
+      self.total += product.price * quantity.to_i
+      self.save!
     end
-  end
-
-  def total
-    order_items.map(&:price).sum
   end
 
   private
@@ -39,4 +37,5 @@ class Order < ApplicationRecord
       break random unless Order.exists?(number: random)
     end  
   end
+
 end

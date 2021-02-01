@@ -71,7 +71,7 @@ ActiveRecord::Schema.define(version: 2021_01_31_040223) do
   create_table "orders", force: :cascade do |t|
     t.bigint "user_id", null: false
     t.string "number"
-    t.decimal "total"
+    t.decimal "total", default: "0.0"
     t.string "state"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
