@@ -10,6 +10,6 @@ RSpec.describe Payment, type: :model do
     url = order.pay_with_paypal('192.168.1.1', 'a', 'b')
     payment = order.payments.last
     payment.process_paypal_payment('192.168.1.1')
-    expect(payment.state).to be == 'completed'
+    expect(payment.state).to be == 'processing'
   end
 end
